@@ -8,11 +8,28 @@ Cela évite d'écrire l'index du DataFrame dans les fichiers CSV générés
 """
 
 from pathlib import Path
+import ast
 
 PACKAGE_ROOT = Path(__file__).parents[2] / "formation_mlops_2"
 
-
-
 def test_to_csv_called_with_index_false():
-    # Given
-    assert False # noqa: B011
+    violations = []
+
+    for file in PACKAGE_ROOT.rglob("*.py"):
+        tree = ast.parse(file.read_text())
+
+        for node in ast.walk(tree):
+            if (
+                isinstance(node, ast.Call)
+                and isinstance(node.func, ast.Attribute)
+                and node.func.attr == "to_csv"
+            ):
+                if not any(
+                    kw.arg == "index"
+                    and isinstance(kw.value, ast.Constant)
+                    and kw.value.value is False
+                    for kw in node.keywords
+                ):
+                    violations.append(f"{file}:{node.lineno}")
+
+    assert not violations, f"to_csv sans index=False:\n" + "\n".join(violations)
