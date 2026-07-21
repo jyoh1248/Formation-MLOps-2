@@ -29,3 +29,7 @@ jobs:
         run: python -m pytest tests/test_architecture
       - name : Run BDD test
         run : uv run behave tests/test_functional/features
+      - name : Run coverage test
+        run : uv run pytest --cov=formation_mlops_2/ tests/test_unit/ -vv -p no:warnings
+      - name : Run pyramid test
+        run : chmod +x tests/tests_pyramid.sh
