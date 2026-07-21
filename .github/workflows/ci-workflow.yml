@@ -20,10 +20,11 @@ jobs:
       - name: Run Linter
         run: 
           uv run ruff check --output-format=github --target-version=py39
-          uv run ruff format --diff --target-version=py39
+      - name: Ruff Format
+        run: uv run ruff format . --diff --target-version=py39
         continue-on-error: true
       - name: Run vulture
-        run: uv run vulture . --min-confidence 80
+        run: uv run vulture . --exclude ".venv/*" --min-confidence 80
       - name: Run tests
         run: pytest
 
