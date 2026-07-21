@@ -6,11 +6,11 @@ Vérifie que tous les appels à `to_csv` faits dans le package
 Cela évite d'écrire l'index du DataFrame dans les fichiers CSV générés
 (données, prédictions, etc.).
 """
-
-from pathlib import Path
 import ast
+from pathlib import Path
 
 PACKAGE_ROOT = Path(__file__).parents[2] / "formation_mlops_2"
+
 
 def test_to_csv_called_with_index_false():
     violations = []
@@ -23,13 +23,13 @@ def test_to_csv_called_with_index_false():
                 isinstance(node, ast.Call)
                 and isinstance(node.func, ast.Attribute)
                 and node.func.attr == "to_csv"
-            ):
-                if not any(
+                and not any(
                     kw.arg == "index"
                     and isinstance(kw.value, ast.Constant)
                     and kw.value.value is False
                     for kw in node.keywords
-                ):
-                    violations.append(f"{file}:{node.lineno}")
+                )
+            ):
+                violations.append(f"{file}:{node.lineno}")
 
-    assert not violations, f"to_csv sans index=False:\n" + "\n".join(violations)
+    assert not violations, "to_csv sans index=False:\n" + "\n".join(violations)
