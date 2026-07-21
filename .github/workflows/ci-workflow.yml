@@ -17,8 +17,11 @@ jobs:
         run: uv python install
       - name: Install dependencies
         run: uv sync --locked --all-groups
-#      - name: Run Linter
-#        run: "Trainee should add command to run ruff"
-#      - name: Run tests
-#        run: "Trainee should add command to run test"
+      - name: Run Linter
+        run: pipx install ruff
+          ruff check --output-format=github --target-version=py39
+          ruff format --diff --target-version=py39
+        continue-on-error: true
+      - name: Run tests
+        run: pytest
 
