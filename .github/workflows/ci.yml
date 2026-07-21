@@ -27,4 +27,5 @@ jobs:
       - name: Run tests
         continue-on-error: true # Task is expected to fail (there is a test that trainee will fix"
         run: python -m pytest tests/test_architecture
-
+      - name : Run BDD test
+        run : uv run behave tests/test_functional/features
