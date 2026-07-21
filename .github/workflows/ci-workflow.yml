@@ -17,11 +17,18 @@ jobs:
         run: uv python install
       - name: Install dependencies
         run: uv sync --locked --all-groups
+      - name: Install tools
+        run: 
+          [pipx install ruff
+          pipx install vulture]
       - name: Run Linter
-        run: pipx install ruff
+        run: 
           ruff check --output-format=github --target-version=py39
           ruff format --diff --target-version=py39
         continue-on-error: true
+      - name: Run vulture
+        run: vulture . --min-confidence 80
       - name: Run tests
         run: pytest
+
 
