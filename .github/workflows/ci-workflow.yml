@@ -17,10 +17,6 @@ jobs:
         run: uv python install
       - name: Install dependencies
         run: uv sync --locked --all-groups
-      - name: Install tools
-        run: 
-          [pipx install ruff
-          pipx install vulture]
       - name: Run Linter
         run: 
           ruff check --output-format=github --target-version=py39
