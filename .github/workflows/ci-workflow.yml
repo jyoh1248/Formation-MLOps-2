@@ -24,7 +24,7 @@ jobs:
         run: uv run ruff format . --diff --target-version=py39
         continue-on-error: true
       - name: Run vulture
-        run: uv run vulture . --exclude ".venv/*" --min-confidence 80
+        run: uv run vulture formation_mlops_2 tests --min-confidence 80
       - name: Run tests
         run: pytest
 
