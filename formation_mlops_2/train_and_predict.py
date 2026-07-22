@@ -19,8 +19,8 @@ def train_model(features: pd.DataFrame, model_registry_folder: str) -> None:
         mlflow.sklearn.log_model(
             sk_model=model,
             name="leia",
-            input_example=df_x,
-            registered_model_name="Registered model",
+            input_example=df_x.iloc[:1,:],
+            registered_model_name="leiamodel",
         )
 
 
