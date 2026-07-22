@@ -1,6 +1,8 @@
+import logging
 import os
 import time
 
+logger = logging.getLogger(__name__)
 
 def train_model_with_io(features_path: str, model_registry_folder: str) -> None:
     import pandas as pd
@@ -17,8 +19,13 @@ def predict_with_io(features_path: str, model_path: str, predictions_folder: str
 
     from formation_mlops_2.train_and_predict import predict
 
+    logger.info("-- Reading data")
     features = pd.read_parquet(features_path)
+
+    logger.info("-- Predict")
     features = predict(features, model_path)
+
+    logger.info("-- Writing data")
     time_str = time.strftime('%Y%m%d-%H%M%S')
     features['predictions_time'] = time_str
     features[['predictions', 'predictions_time']].to_csv(os.path.join(predictions_folder, time_str + '.csv'),
