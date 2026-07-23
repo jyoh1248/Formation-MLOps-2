@@ -4,16 +4,18 @@ from pathlib import Path
 
 import boto3
 from dotenv import load_dotenv
+import mlflow
 
 load_dotenv(Path(__file__).parent / ".env")
 
 MODEL_ID = os.getenv("MODEL_ID")
 
 # Début d'insérer ici le code MLflow
+mlflow.set_experiment("agent-demo")
+mlflow.bedrock.autolog()
 
 # Fin
 bedrock = boto3.client("bedrock-runtime", region_name=os.environ.get("AWS_REGION"))
-
 
 def get_weather(city: str) -> dict:
     """Faux outil météo, juste pour illustrer un tool call dans la trace."""
@@ -81,5 +83,6 @@ def run_agent(question: str) -> str:
 
 
 if __name__ == "__main__":
-    answer = run_agent("Quel temps fait-il à Marseille ?")
+    answer = run_agent("What is the weather in PARIS?")
     print(json.dumps({"answer": answer}, ensure_ascii=False, indent=2))
+
