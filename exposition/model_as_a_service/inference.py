@@ -14,8 +14,8 @@ def health():
 
 
 @app.get("/predict")
-def predict_endpoint():  # Add arg here
-    received_wind_speed_avg = ...
+def predict_endpoint(Ws1_avg : str):  # Add arg here
+    received_wind_speed_avg = Ws1_avg
     received_data = {
         "Wind_turbine_name": "R80721",
         "Date_time": "2017-02-08T08:00:00+01:00",

@@ -3,8 +3,13 @@ import time
 
 from fastapi import FastAPI
 
-app = FastAPI()
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    asyncio.to_thread.current_default_thread_limiter().total_tokens = 1
+    yield
+
+app = FastAPI(lifespan=lifespan)
 
 @app.get("/blocking/{n}")
 async def blocking(n: int):
