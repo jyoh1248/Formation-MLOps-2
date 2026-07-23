@@ -5,6 +5,7 @@ import joblib
 import mlflow
 import pandas as pd
 from sklearn.ensemble import RandomForestRegressor
+from xgboost import XGBClassifier
 
 
 def train_model(features: pd.DataFrame, model_registry_folder: str) -> None:
@@ -13,13 +14,21 @@ def train_model(features: pd.DataFrame, model_registry_folder: str) -> None:
     y = features[target]
     with mlflow.start_run():
         # log_models set to False because it doesn't work so we will log manually
-        mlflow.sklearn.autolog(log_models=False)
-        model = RandomForestRegressor(n_estimators=1, max_depth=10, n_jobs=1)
+        mlflow.xgboost.autolog(log_models=False)
+        model = XGBClassifier(
+                n_estimators=100,
+                max_depth=10,
+                learning_rate=0.1,
+                n_jobs=1,
+                random_state=42,
+                eval_metric="logloss",
+                )
+
         model.fit(df_x, y)
-        mlflow.sklearn.log_model(
+        mlflow.xgboost.log_model(
             sk_model=model,
-            name="sklearn_model",
-            registered_model_name="sklearn_model",
+            name="xgboost_model",
+            registered_model_name="resgistred_xgboost_model",
         )
     time_str = time.strftime('%Y%m%d-%H%M%S')
     joblib.dump(model, os.path.join(model_registry_folder, time_str + '.joblib'))

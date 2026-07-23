@@ -41,5 +41,11 @@ def predict():
     predict_with_io_task(feature_path=feature_path)
     monitor_task()
 
+    @task
+    def shadow_production_with_io_task(feature_path: str) -> None:
+        shadow_predict_with_io(features_path=feature_path,
+                        model_path=...,
+                        )
+
 
 predict_dag = predict()
